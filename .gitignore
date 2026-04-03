@@ -1,0 +1,13 @@
+# 环境变量（含 API Key，绝对不能上传）
+.env
+
+# 本地保存的评估进度（用户隐私数据）
+saved_progress.json
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# Streamlit 本地缓存
+.streamlit/secrets.toml
