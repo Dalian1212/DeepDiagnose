@@ -553,12 +553,20 @@ MODULE_F_GAD = {
             "followup": "多数日子里都有吗？",
             "criterion": "睡眠障碍",
         },
+        # ── D标准：功能损害 ──
+        {
+            "id": "GAD_D",
+            "ask": "这些担忧和焦虑，对你的日常生活造成了明显的影响吗？比如工作、学习、人际关系，或者让你感到非常痛苦？",
+            "followup": "有多大程度影响了你正常的生活？",
+            "criterion": "D: 导致明显的临床痛苦或社会/职业功能损害",
+        },
     ],
     "gate": {"ids": ["GAD_A", "GAD_B"], "rule": "any_no_skip"},
     "threshold": {
         "min_yes": 3,
         "must_include_one_of": None,
         "all_items": ["GAD_C1", "GAD_C2", "GAD_C3", "GAD_C4", "GAD_C5", "GAD_C6"],
+        "required_yes": ["GAD_D"],
     },
 }
 
