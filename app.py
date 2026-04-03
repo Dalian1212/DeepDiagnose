@@ -260,30 +260,29 @@ if "messages" not in st.session_state:
         except Exception as e:
             st.error(f"连接失败：{e}")
 
-# ── 中途报告弹窗 ──
+# ── 显示对话历史 ──
+for msg in st.session_state.messages:
+    avatar = "🤖" if msg["role"] == "assistant" else "🙂"
+    with st.chat_message(msg["role"], avatar=avatar):
+        st.markdown(msg["content"])
+
+# ── 中途报告（在聊天底部生成，用户可见）──
 if st.session_state.get("show_partial_report"):
-    with st.expander("📋 当前已完成模块的评估结果", expanded=True):
-        with st.spinner("生成报告中..."):
+    with st.chat_message("assistant", avatar="🤖"):
+        with st.spinner("正在生成已完成模块的报告，请稍候..."):
             try:
                 report = get_partial_report(
                     st.session_state.engine,
                     st.session_state.messages
                 )
                 st.markdown(report)
-                # 自动保存进度
-                save_progress(st.session_state.engine, st.session_state.messages)
             except Exception as e:
                 st.error(f"生成报告失败：{e}")
-        if st.button("关闭报告，继续评估"):
-            st.session_state.show_partial_report = False
-            st.rerun()
+                report = None
+    if st.button("关闭报告，继续评估"):
+        st.session_state.show_partial_report = False
+        st.rerun()
     st.stop()
-
-# ── 显示对话历史 ──
-for msg in st.session_state.messages:
-    avatar = "🤖" if msg["role"] == "assistant" else "🙂"
-    with st.chat_message(msg["role"], avatar=avatar):
-        st.markdown(msg["content"])
 
 # ── 用户输入 ──
 placeholder = "请输入你的回答..." if not st.session_state.engine.is_done else "评估已完成，如有问题可继续提问..."
