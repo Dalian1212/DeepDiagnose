@@ -313,6 +313,76 @@ MODULE_A_PAST_HYPOMANIC = {
     },
 }
 
+# ── 模块A（续）：持续性抑郁障碍（Persistent Depressive Disorder / 心境恶劣）──
+MODULE_A_PDD = {
+    "id": "pdd",
+    "name": "持续性抑郁障碍评估",
+    "questions": [
+        {
+            "id": "PDD_gate",
+            "ask": "在过去2年中，你是否大多数日子里都感到情绪低落、悲伤或空虚？",
+            "followup": "这种情绪低落是否持续了至少2年？大多数日子里都是这样吗？",
+            "criterion": "A: 持续≥2年，大多数日子情绪低落",
+            "is_gate": True,
+        },
+        {
+            "id": "PDD_B1",
+            "ask": "在这段长期情绪低落的时间里，你的食欲怎么样？有没有明显减退或增加？",
+            "followup": "大多数时候都这样吗？",
+            "criterion": "B1: 食欲减退或增加",
+        },
+        {
+            "id": "PDD_B2",
+            "ask": "那段时间你的睡眠怎么样？有没有失眠，或者睡得特别多？",
+            "followup": "大多数日子里都有吗？",
+            "criterion": "B2: 失眠或睡眠过多",
+        },
+        {
+            "id": "PDD_B3",
+            "ask": "那段时间你有没有感到精力不足或经常疲劳？",
+            "followup": "大多数日子里都有这种感觉吗？",
+            "criterion": "B3: 精力不足或疲劳感",
+        },
+        {
+            "id": "PDD_B4",
+            "ask": "那段时间你对自己的评价怎么样？有没有觉得自己没有价值、很差劲？",
+            "followup": "大多数时候都有这种感觉吗？",
+            "criterion": "B4: 低自我评价",
+        },
+        {
+            "id": "PDD_B5",
+            "ask": "那段时间你有没有注意力难以集中，或者做决定比以前困难很多？",
+            "followup": "大多数日子里都有吗？",
+            "criterion": "B5: 注意力难以集中或难以做决定",
+        },
+        {
+            "id": "PDD_B6",
+            "ask": "那段时间你有没有感到无望，觉得情况不会好转，对未来没有希望？",
+            "followup": "大多数时候都有这种感觉吗？",
+            "criterion": "B6: 无望感",
+        },
+        {
+            "id": "PDD_C",
+            "ask": "在这整整2年中，你的情绪低落是否几乎一直持续存在，从来没有连续超过2个月感觉完全好转过？",
+            "followup": "有没有持续2个月以上完全没有这些症状的时期？",
+            "criterion": "C: 症状从未连续缓解超过2个月",
+        },
+        {
+            "id": "PDD_H",
+            "ask": "这种长达2年的情绪低落对你的日常生活造成了明显的影响吗？比如工作、学习、人际关系，或者让你感到很痛苦？",
+            "followup": "有多大程度影响了你正常的生活？",
+            "criterion": "H: 导致明显的临床痛苦或社会/职业功能损害",
+        },
+    ],
+    "gate": {"ids": ["PDD_gate"], "rule": "any_no_skip"},
+    "threshold": {
+        "min_yes": 2,
+        "must_include_one_of": None,
+        "all_items": ["PDD_B1", "PDD_B2", "PDD_B3", "PDD_B4", "PDD_B5", "PDD_B6"],
+        "required_yes": ["PDD_C", "PDD_H"],
+    },
+}
+
 # ── 模块F：惊恐障碍（Panic Disorder）──
 MODULE_F_PANIC = {
     "id": "panic",
@@ -791,6 +861,7 @@ ALL_MODULES = [
     MODULE_A_PAST_MANIC,     # 既往躁狂发作
     MODULE_A_HYPOMANIC,      # 当前轻躁狂发作
     MODULE_A_PAST_HYPOMANIC, # 既往轻躁狂发作
+    MODULE_A_PDD,            # 持续性抑郁障碍
     MODULE_F_PANIC,          # 惊恐障碍
     MODULE_F_AGORAPHOBIA,    # 广场恐惧症
     MODULE_F_SOCIAL,         # 社交焦虑障碍

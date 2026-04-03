@@ -18,6 +18,7 @@ PATIENT_PROFILES = {
             "A9": "no",  "A10": "yes",
             # 其他模块全部否定
             "A_P1": "no", "M_gate": "no", "HM_gate": "no",
+            "PDD_gate": "no",
             "PD_gate": "no", "AG_gate": "no", "SA_gate": "no",
             "GAD_A": "no", "OCD_G1": "no", "OCD_G2": "no",
             "G_screen": "no",
@@ -34,8 +35,8 @@ PATIENT_PROFILES = {
             "M_B1": "yes", "M_B2": "yes", "M_B3": "yes",
             "M_B4": "no",  "M_B5": "no",  "M_B6": "no",  "M_B7": "no",
             "M_C": "yes", "M_D": "yes",
-            "M_P1": "no", "HM_gate": "no", "PD_gate": "no",
-            "AG_gate": "no", "SA_gate": "no", "GAD_A": "no",
+            "M_P1": "no", "HM_gate": "no", "PDD_gate": "no",
+            "PD_gate": "no", "AG_gate": "no", "SA_gate": "no", "GAD_A": "no",
             "OCD_G1": "no", "OCD_G2": "no", "G_screen": "no",
         },
         "note": "M_B1+B2+B3=3项，M_C=yes，M_D=yes → 应判阳性"
@@ -51,7 +52,7 @@ PATIENT_PROFILES = {
             "HM_B1": "yes", "HM_B2": "yes", "HM_B3": "yes",
             "HM_B4": "no",  "HM_B5": "no",  "HM_B6": "no",  "HM_B7": "no",
             "HM_C": "yes",
-            "HM_P1": "no", "PD_gate": "no", "AG_gate": "no",
+            "HM_P1": "no", "PDD_gate": "no", "PD_gate": "no", "AG_gate": "no",
             "SA_gate": "no", "GAD_A": "no",
             "OCD_G1": "no", "OCD_G2": "no", "G_screen": "no",
         },
@@ -63,6 +64,7 @@ PATIENT_PROFILES = {
         "answers": {
             "A1": "no", "A2": "no", "A_P1": "no",
             "M_gate": "no", "M_P1": "no", "HM_gate": "no", "HM_P1": "no",
+            "PDD_gate": "no",
             # 惊恐障碍
             "PD_gate": "yes",
             "PD_S1": "yes", "PD_S2": "yes", "PD_S3": "yes", "PD_S4": "yes",
@@ -80,6 +82,7 @@ PATIENT_PROFILES = {
         "answers": {
             "A1": "no", "A2": "no", "A_P1": "no",
             "M_gate": "no", "M_P1": "no", "HM_gate": "no", "HM_P1": "no",
+            "PDD_gate": "no",
             "PD_gate": "no", "AG_gate": "no",
             # 社交焦虑
             "SA_gate": "yes",
@@ -97,6 +100,7 @@ PATIENT_PROFILES = {
         "answers": {
             "A1": "no", "A2": "no", "A_P1": "no",
             "M_gate": "no", "M_P1": "no", "HM_gate": "no", "HM_P1": "no",
+            "PDD_gate": "no",
             "PD_gate": "no", "AG_gate": "no", "SA_gate": "no", "GAD_A": "no",
             # 强迫症
             "OCD_G1": "yes", "OCD_G2": "yes", "OCD_C": "yes",
@@ -110,6 +114,7 @@ PATIENT_PROFILES = {
         "answers": {
             "A1": "no", "A2": "no", "A_P1": "no",
             "M_gate": "no", "M_P1": "no", "HM_gate": "no", "HM_P1": "no",
+            "PDD_gate": "no",
             "PD_gate": "no", "AG_gate": "no", "SA_gate": "no", "GAD_A": "no",
             "OCD_G1": "no", "OCD_G2": "no",
             # PTSD
@@ -128,17 +133,35 @@ PATIENT_PROFILES = {
     "患者H：无任何障碍（健康人）": {
         "expected": {
             "depression": "skipped", "mania": "skipped",
-            "hypomania": "skipped", "panic": "skipped",
-            "social_anxiety": "skipped", "ocd": "skipped",
-            "trauma": "skipped",
+            "hypomania": "skipped", "pdd": "skipped",
+            "panic": "skipped", "social_anxiety": "skipped",
+            "ocd": "skipped", "trauma": "skipped",
         },
         "answers": {
             "A1": "no", "A2": "no", "A_P1": "no",
             "M_gate": "no", "M_P1": "no", "HM_gate": "no", "HM_P1": "no",
+            "PDD_gate": "no",
             "PD_gate": "no", "AG_gate": "no", "SA_gate": "no", "GAD_A": "no",
             "OCD_G1": "no", "OCD_G2": "no", "G_screen": "no",
         },
         "note": "所有门卫问题均否 → 所有模块应被跳过"
+    },
+
+    "患者I：持续性抑郁障碍（心境恶劣）": {
+        "expected": {"pdd": "positive"},
+        "answers": {
+            "A1": "no", "A2": "no", "A_P1": "no",
+            "M_gate": "no", "M_P1": "no", "HM_gate": "no", "HM_P1": "no",
+            # 持续性抑郁障碍
+            "PDD_gate": "yes",
+            "PDD_B1": "no",  "PDD_B2": "yes", "PDD_B3": "yes",
+            "PDD_B4": "yes", "PDD_B5": "no",  "PDD_B6": "yes",
+            "PDD_C": "yes", "PDD_H": "yes",
+            # 其他全否
+            "PD_gate": "no", "AG_gate": "no", "SA_gate": "no", "GAD_A": "no",
+            "OCD_G1": "no", "OCD_G2": "no", "G_screen": "no",
+        },
+        "note": "PDD_B2+B3+B4+B6=4项≥2，PDD_C=yes，PDD_H=yes → 应判阳性"
     },
 }
 
