@@ -269,18 +269,22 @@ for msg in st.session_state.messages:
 # ── 中途报告（在聊天底部生成，用户可见）──
 if st.session_state.get("show_partial_report"):
     with st.chat_message("assistant", avatar="🤖"):
-        with st.spinner("正在生成已完成模块的报告，请稍候..."):
-            try:
-                report = get_partial_report(
-                    st.session_state.engine,
-                    st.session_state.messages
-                )
-                st.markdown(report)
-            except Exception as e:
-                st.error(f"生成报告失败：{e}")
-                report = None
+        # 只在第一次生成，后续刷新直接读缓存，避免重复调用 API
+        if "partial_report_cache" not in st.session_state:
+            with st.spinner("正在生成已完成模块的报告，请稍候..."):
+                try:
+                    st.session_state.partial_report_cache = get_partial_report(
+                        st.session_state.engine,
+                        st.session_state.messages
+                    )
+                except Exception as e:
+                    st.error(f"生成报告失败：{e}")
+                    st.session_state.partial_report_cache = None
+        if st.session_state.partial_report_cache:
+            st.markdown(st.session_state.partial_report_cache)
     if st.button("关闭报告，继续评估"):
         st.session_state.show_partial_report = False
+        st.session_state.pop("partial_report_cache", None)
         st.rerun()
     st.stop()
 
