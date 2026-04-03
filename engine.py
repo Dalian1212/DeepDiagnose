@@ -202,7 +202,12 @@ class AssessmentEngine:
                 has_required = any(self.answers.get(i) == "yes" for i in must_include)
                 if not has_required:
                     return False
-            if yes_count < threshold["min_yes"]:
+            # 条件阈值：纯易激惹型需要更多症状（DSM-5 规定）
+            min_yes = threshold["min_yes"]
+            cond = threshold.get("min_yes_if_no")
+            if cond and self.answers.get(cond["question"]) == "no":
+                min_yes = cond["then"]
+            if yes_count < min_yes:
                 return False
             # 必须全部为"是"的项目（如功能损害、病程标准）
             required_yes = threshold.get("required_yes", [])

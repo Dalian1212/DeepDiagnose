@@ -25,19 +25,15 @@ PATIENT_PROFILES = {
         "note": "A1+A2+A3+A4+A6+A7+A8=7项，A10=yes → 应判阳性"
     },
 
-    "患者B：当前躁狂发作": {
+    "患者B：当前躁狂发作（情绪高涨型）": {
         "expected": {"mania": "positive"},
         "answers": {
-            # 抑郁模块：跳过（A1 A2都否）
-            "A1": "no", "A2": "no",
-            # 既往抑郁：无
-            "A_P1": "no",
-            # 当前躁狂
+            "A1": "no", "A2": "no", "A_P1": "no",
             "M_gate": "yes",
+            "M_gate_elev": "yes",  # 情绪高涨型 → 需3项B标准
             "M_B1": "yes", "M_B2": "yes", "M_B3": "yes",
             "M_B4": "no",  "M_B5": "no",  "M_B6": "no",  "M_B7": "no",
             "M_C": "yes", "M_D": "yes",
-            # 其他全否
             "M_P1": "no", "HM_gate": "no", "PD_gate": "no",
             "AG_gate": "no", "SA_gate": "no", "GAD_A": "no",
             "OCD_G1": "no", "OCD_G2": "no", "G_screen": "no",
@@ -49,16 +45,12 @@ PATIENT_PROFILES = {
         "expected": {"mania": "skipped", "hypomania": "positive"},
         "answers": {
             "A1": "no", "A2": "no", "A_P1": "no",
-            # 当前躁狂：无（最近1个月内无）
-            "M_gate": "no",
-            # 既往躁狂：无
-            "M_P1": "no",
-            # 当前轻躁狂
+            "M_gate": "no", "M_P1": "no",
             "HM_gate": "yes",
+            "HM_gate_elev": "yes",  # 情绪高涨型 → 需3项B标准
             "HM_B1": "yes", "HM_B2": "yes", "HM_B3": "yes",
             "HM_B4": "no",  "HM_B5": "no",  "HM_B6": "no",  "HM_B7": "no",
             "HM_C": "yes",
-            # 其他全否
             "HM_P1": "no", "PD_gate": "no", "AG_gate": "no",
             "SA_gate": "no", "GAD_A": "no",
             "OCD_G1": "no", "OCD_G2": "no", "G_screen": "no",

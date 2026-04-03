@@ -118,7 +118,13 @@ MODULE_A_MANIC = {
             "criterion": "最近1个月内存在异常高涨/易激惹情绪且精力增加",
             "is_gate": True,
         },
-        # ── B 标准症状（至少3项为"是"）──
+        {
+            "id": "M_gate_elev",
+            "ask": "那段时间，你的情绪主要是特别高涨、兴奋、感觉很好？还是主要表现为容易发脾气、烦躁易怒？",
+            "followup": "是情绪高涨为主，还是易激惹为主？",
+            "criterion": "A: 情绪高涨/兴奋（有别于纯易激惹）",
+        },
+        # ── B 标准症状（高涨型≥3项，纯易激惹型≥4项）──
         {
             "id": "M_B1",
             "ask": "在那段情绪高涨的时期，你对自己的感觉怎么样？有没有觉得自己特别厉害、有特殊能力，或者比平时重要得多？",
@@ -179,6 +185,7 @@ MODULE_A_MANIC = {
     "gate": {"ids": ["M_gate"], "rule": "any_no_skip"},
     "threshold": {
         "min_yes": 3,
+        "min_yes_if_no": {"question": "M_gate_elev", "then": 4},
         "must_include_one_of": None,
         "all_items": ["M_B1", "M_B2", "M_B3", "M_B4", "M_B5", "M_B6", "M_B7"],
         "required_yes": ["M_C", "M_D"],
@@ -218,7 +225,13 @@ MODULE_A_HYPOMANIC = {
             "criterion": "存在明显异于平时的情绪高涨/精力增加时期（他人可察觉）",
             "is_gate": True,
         },
-        # ── B 标准症状（至少3项为"是"）──
+        {
+            "id": "HM_gate_elev",
+            "ask": "那段时间，你的情绪主要是特别高涨、兴奋？还是主要表现为容易发脾气、烦躁？",
+            "followup": "是情绪高涨为主，还是易激惹为主？",
+            "criterion": "A: 情绪高涨/兴奋（有别于纯易激惹）",
+        },
+        # ── B 标准症状（高涨型≥3项，纯易激惹型≥4项）──
         {
             "id": "HM_B1",
             "ask": "在那段时间，你有没有觉得自己特别自信、比平时更有能力，或者对自己的评价变得很高？",
@@ -272,6 +285,7 @@ MODULE_A_HYPOMANIC = {
     "gate": {"ids": ["HM_gate"], "rule": "any_no_skip"},
     "threshold": {
         "min_yes": 3,
+        "min_yes_if_no": {"question": "HM_gate_elev", "then": 4},
         "must_include_one_of": None,
         "all_items": ["HM_B1", "HM_B2", "HM_B3", "HM_B4", "HM_B5", "HM_B6", "HM_B7"],
         "required_yes": ["HM_C"],
