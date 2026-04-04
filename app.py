@@ -158,10 +158,29 @@ with st.sidebar:
 
         st.divider()
 
-        # 中途查看结果按钮
+        # 中途查看结果 / 下载按钮
         if progress["done"] and not st.session_state.engine.is_done:
             if st.button("📋 查看已完成模块的结果"):
                 st.session_state.show_partial_report = True
+
+            # 下载中途报告
+            if st.session_state.get("partial_download_data"):
+                st.download_button(
+                    label="⬇️ 下载中途报告",
+                    data=st.session_state.partial_download_data,
+                    file_name="deepdiagnose_partial_report.md",
+                    mime="text/markdown",
+                )
+            else:
+                if st.button("📥 生成中途报告以下载"):
+                    with st.spinner("生成中..."):
+                        try:
+                            st.session_state.partial_download_data = get_partial_report(
+                                st.session_state.engine, st.session_state.messages
+                            )
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"生成失败：{e}")
 
         # 评估完成后查看完整报告
         if st.session_state.engine.is_done and st.session_state.get("final_report"):
