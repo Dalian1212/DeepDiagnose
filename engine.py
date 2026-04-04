@@ -14,6 +14,7 @@ MODULE_NAMES = {
     "past_mania":       "既往躁狂发作筛查（模块A）",
     "hypomania":        "当前轻躁狂发作评估（模块A）",
     "past_hypomania":   "既往轻躁狂发作筛查（模块A）",
+    "pdd":              "持续性抑郁障碍评估（模块A）",
     "panic":            "惊恐障碍评估（模块F）",
     "agoraphobia":      "广场恐惧症评估（模块F）",
     "social_anxiety":   "社交焦虑障碍评估（模块F）",
@@ -426,40 +427,44 @@ class AssessmentEngine:
             judgment = self._judge_answer(q, user_answer)
         self.answers[q["id"]] = judgment
 
-        # 2. 危机检测
-        if is_crisis and judgment == "yes":
-            return "crisis", iter([CRISIS_MESSAGE]), True
+        # 危机标志（先记录，等状态推进后再决定是否触发）
+        crisis_triggered = is_crisis and judgment == "yes"
 
-        # 3. 移动到下一题
+        # 2. 移动到下一题
         self.current_q_index += 1
 
-        # 4. 检查门卫
+        # 3. 检查门卫
         gate_ids = self.current_module.get("gate", {}).get("ids", [])
         all_gate_answered = all(qid in self.answers for qid in gate_ids)
         if all_gate_answered and self._check_gate():
             self.module_results[self.current_module["id"]] = "skipped"
             self._load_next_module()
+            if crisis_triggered:
+                return "crisis", iter([CRISIS_MESSAGE]), True
             if self.is_done or self.current_module is None:
                 return "summary", iter([""]), False
             nq = self._get_current_question()
             return "ask_next", self._ask_question_stream(nq, "好的，我们来聊聊另一个方面。"), False
 
-        # 5. 检查是否问完当前模块
+        # 4. 检查是否问完当前模块
         if self.current_q_index >= len(self.current_module["questions"]):
             completed_q_count = len(self.current_module["questions"])
             passed = self._check_threshold()
             self.module_results[self.current_module["id"]] = "positive" if passed else "negative"
             self._load_next_module()
+            if crisis_triggered:
+                return "crisis", iter([CRISIS_MESSAGE]), True
             if self.is_done or self.current_module is None:
                 return "summary", iter([""]), False
             nq = self._get_current_question()
-            # 1题模块（既往筛查）完成后不插入生硬的过渡语，直接问下一题
             if completed_q_count == 1:
                 prefix = ""
             else:
                 prefix = "谢谢你告诉我这些。我们再了解一些其他方面。"
             return "module_done", self._ask_question_stream(nq, prefix), False
 
-        # 6. 继续当前模块下一题（流式）
+        # 5. 继续当前模块下一题（流式）
+        if crisis_triggered:
+            return "crisis", iter([CRISIS_MESSAGE]), True
         nq = self._get_current_question()
         return "ask_next", self._ask_question_stream(nq), False
